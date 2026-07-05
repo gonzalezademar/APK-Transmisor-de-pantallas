@@ -1,0 +1,125 @@
+<Window x:Class="DroneScreenViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Asset Guardian - Sistema de Inspección Aérea" Height="700" Width="1000"
+        Background="#121418" WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <!-- Estilo base de Botones -->
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#2A2F3A"/>
+                    <Setter Property="Foreground" Value="#666666"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ActionButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Background" Value="#10B981"/>
+        </Style>
+        
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Background" Value="#EF4444"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- PANEL LATERAL: Gestión de Sesión -->
+        <Border Grid.Column="0" Background="#1A1C20" BorderBrush="#2D3139" BorderThickness="0,0,1,0" Padding="20">
+            <StackPanel>
+                <TextBlock Text="ASSET GUARDIAN" Foreground="White" FontSize="22" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBlock Text="Sistema de Inspección" Foreground="#888888" FontSize="12" Margin="0,0,0,30"/>
+
+                <!-- Estado de Bloqueo -->
+                <Border x:Name="LockStatusBorder" Background="#312222" CornerRadius="6" Padding="15" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock x:Name="LockStatusText" Text="SISTEMA BLOQUEADO" Foreground="#EF4444" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Requiere Registro de Vuelo" Foreground="#AA8888" FontSize="11" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Botón Principal de Sesión -->
+                <Button x:Name="BtnToggleSession" Content="INICIAR MISIÓN DE VUELO" 
+                        Style="{StaticResource ActionButton}" Margin="0,0,0,30"
+                        Click="BtnToggleSession_Click"/>
+
+                <!-- Datos de la Misión (Oculto al inicio) -->
+                <StackPanel x:Name="PanelFlightData" Visibility="Collapsed">
+                    <TextBlock Text="DATOS DE LA MISIÓN" Foreground="#555555" FontSize="11" FontWeight="Bold" Margin="0,0,0,10"/>
+                    
+                    <TextBlock Text="Piloto:" Foreground="#888888" FontSize="12"/>
+                    <TextBlock x:Name="TxtInfoPilot" Text="---" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                    
+                    <TextBlock Text="Locación:" Foreground="#888888" FontSize="12"/>
+                    <TextBlock x:Name="TxtInfoLocation" Text="---" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                    
+                    <TextBlock Text="Carpeta de Sesión:" Foreground="#888888" FontSize="12"/>
+                    <TextBlock x:Name="TxtInfoFolder" Text="---" Foreground="White" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                </StackPanel>
+                
+            </StackPanel>
+        </Border>
+
+        <!-- PANEL CENTRAL: Video y Herramientas -->
+        <Grid Grid.Column="1" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Encabezado / Selector de Fuente de Video -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
+                <TextBlock Text="Fuente de Video:" Foreground="#888888" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <ComboBox x:Name="CmbVideoSource" Width="200" Padding="5" SelectedIndex="0">
+                    <ComboBoxItem Content="Capturadora HDMI (M30T)"/>
+                    <ComboBoxItem Content="Cable USB Android (ADB)"/>
+                </ComboBox>
+                
+                <TextBlock x:Name="AdbStatusText" Text="ESTADO: DESCONECTADO" Foreground="#888888" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            </StackPanel>
+
+            <Border Grid.Row="1" Background="#0A0B0E" BorderBrush="#2D3139" BorderThickness="1" CornerRadius="8" ClipToBounds="True">
+                <Grid x:Name="VideoContainer">
+                    <!-- Reproductor de OpenCV -->
+                    <Image x:Name="VideoPreviewImage" Stretch="Uniform" />
+                    
+                    <TextBlock x:Name="TxtNoSignal" Text="SIN SEÑAL DE VIDEO" Foreground="#333333" FontSize="24" FontWeight="Bold" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                               
+                    <Button x:Name="BtnStartAdbVideo" Content="ABRIR VENTANA SCRCPY" 
+                            Style="{StaticResource PrimaryButton}" 
+                            HorizontalAlignment="Center" VerticalAlignment="Center" Width="200"
+                            Visibility="Collapsed" Click="BtnStartAdbVideo_Click"/>
+                </Grid>
+            </Border>
+
+            <!-- Barra Inferior de Herramientas (BLOQUEADA POR DEFECTO) -->
+            <Border Grid.Row="2" Background="#1A1C20" CornerRadius="8" Padding="15" Margin="0,20,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="BtnCaptureImage" Content="📸 TOMAR FOTO E INSPECCIONAR" 
+                            Style="{StaticResource PrimaryButton}" Width="280" Margin="0,0,15,0"
+                            IsEnabled="False" Click="BtnCaptureImage_Click"/>
+                            
+                    <Button x:Name="BtnRecordVideo" Content="🔴 INICIAR GRABACIÓN" 
+                            Style="{StaticResource PrimaryButton}" Width="200"
+                            IsEnabled="False" Click="BtnRecordVideo_Click"/>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+    </Grid>
+</Window>

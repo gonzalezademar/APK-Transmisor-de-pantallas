@@ -1,0 +1,20 @@
+﻿DroneScreenViewer
+
+
+winexe
+C#
+.cs
+E:\Proyecto_ Asset Guardian\DroneScreenViewer\obj\Debug\net8.0-windows\
+DroneScreenViewer
+none
+false
+TRACE;DEBUG;NET;NET8_0;NETCOREAPP
+E:\Proyecto_ Asset Guardian\DroneScreenViewer\App.xaml
+3736530651
+
+1045114933
+208-1072166006
+MainWindow.xaml;Views\FlightSessionWindow.xaml;Views\MetadataCaptureWindow.xaml;
+
+False
+

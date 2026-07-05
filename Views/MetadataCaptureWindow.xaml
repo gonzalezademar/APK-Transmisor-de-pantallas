@@ -1,0 +1,123 @@
+<Window x:Class="DroneScreenViewer.Views.MetadataCaptureWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Inspección de Captura" Height="650" Width="900"
+        WindowStartupLocation="CenterOwner" WindowStyle="None" ResizeMode="NoResize"
+        Background="#121418" FontFamily="Segoe UI">
+    
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,10,0,5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="#2D3139"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
+
+    <Border BorderBrush="#3A3E47" BorderThickness="1" CornerRadius="8">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="350"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- PANEL IZQUIERDO: VISOR Y MEJORAS -->
+            <Grid Grid.Column="0" Background="#0A0B0E" Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Vista de la Imagen -->
+                <Border Grid.Row="0" BorderBrush="#2D3139" BorderThickness="1" Background="Black" CornerRadius="4">
+                    <Grid>
+                        <TextBlock x:Name="TxtPreviewPlaceholder" Text="[VISTA PREVIA DE CAPTURA AQUI]" Foreground="#444444" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Image x:Name="ImgPreview" Stretch="Uniform"/>
+                    </Grid>
+                </Border>
+
+                <!-- Panel de Cuarto Oscuro (Ajustes de Imagen) -->
+                <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                    <TextBlock Text="AJUSTES DE IMAGEN (TIEMPO REAL)" Foreground="White" FontSize="14" FontWeight="Bold"/>
+                    
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Brillo:" Margin="0"/>
+                        <Slider Grid.Column="1" x:Name="SliderBrightness" Minimum="-100" Maximum="100" Value="0" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="Slider_ValueChanged"/>
+                        <TextBlock Grid.Column="2" Text="{Binding ElementName=SliderBrightness, Path=Value}" HorizontalAlignment="Right" Margin="0"/>
+                    </Grid>
+
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Contraste:" Margin="0"/>
+                        <Slider Grid.Column="1" x:Name="SliderContrast" Minimum="1" Maximum="3" Value="1" TickFrequency="0.1" IsSnapToTickEnabled="True" ValueChanged="Slider_ValueChanged"/>
+                        <TextBlock Grid.Column="2" Text="{Binding ElementName=SliderContrast, Path=Value, StringFormat=N1}" HorizontalAlignment="Right" Margin="0"/>
+                    </Grid>
+
+                    <Button Content="✨ APLICAR AUTO-MEJORA CON IA (CLAHE)" Background="#6366F1" Margin="0,15,0,0" Click="BtnClahe_Click"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- PANEL DERECHO: METADATOS DE INSPECCIÓN -->
+            <Border Grid.Column="1" Background="#1A1C20" BorderBrush="#2D3139" BorderThickness="1,0,0,0" Padding="25">
+                <StackPanel>
+                    <TextBlock Text="DATOS DEL HALLAZGO" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                    <TextBlock Text="1. Tipo de Elemento" />
+                    <ComboBox x:Name="CmbElement">
+                        <ComboBoxItem Content="Elemento 1" IsSelected="True"/>
+                        <ComboBoxItem Content="Elemento 2"/>
+                        <ComboBoxItem Content="Elemento 3"/>
+                    </ComboBox>
+
+                    <TextBlock Text="2. Tipo de Anomalía" />
+                    <ComboBox x:Name="CmbAnomaly">
+                        <ComboBoxItem Content="Anomalía A (Leve)" IsSelected="True"/>
+                        <ComboBoxItem Content="Anomalía B (Moderada)"/>
+                        <ComboBoxItem Content="Anomalía C (Severa)"/>
+                    </ComboBox>
+
+                    <TextBlock Text="3. Criticidad" />
+                    <ComboBox x:Name="CmbCriticality">
+                        <ComboBoxItem Content="Baja" IsSelected="True"/>
+                        <ComboBoxItem Content="Media"/>
+                        <ComboBoxItem Content="Alta"/>
+                        <ComboBoxItem Content="Urgente"/>
+                    </ComboBox>
+
+                    <TextBlock Text="4. Observaciones Técnicas" />
+                    <TextBox x:Name="TxtObservations" Background="#2D3139" Foreground="White" BorderThickness="0" Padding="10" Height="100" TextWrapping="Wrap" AcceptsReturn="True" FontSize="14"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,30,0,0">
+                        <Button Content="CANCELAR" Background="#3A3E47" Width="100" Margin="0,0,10,0" Click="BtnCancel_Click"/>
+                        <Button Content="GUARDAR EN REGISTRO" Background="#10B981" Width="190" Click="BtnSave_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

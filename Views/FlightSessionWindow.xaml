@@ -1,0 +1,57 @@
+<Window x:Class="DroneScreenViewer.Views.FlightSessionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Nuevo Registro de Vuelo - Asset Guardian" Height="500" Width="400"
+        WindowStartupLocation="CenterOwner" WindowStyle="None" ResizeMode="NoResize"
+        Background="#1A1C20" FontFamily="Segoe UI">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,10,0,5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#2D3139"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0,12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
+    
+    <Border BorderBrush="#3A3E47" BorderThickness="1" CornerRadius="8" Padding="25">
+        <StackPanel>
+            <TextBlock Text="INICIAR MISIÓN DE INSPECCIÓN" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+            <TextBlock Text="Nombre del Piloto" />
+            <TextBox x:Name="TxtPilotName" />
+
+            <TextBlock Text="Tipo de Tarea" />
+            <TextBox x:Name="TxtTaskType" />
+
+            <TextBlock Text="Locación" />
+            <TextBox x:Name="TxtLocation" />
+
+            <TextBlock Text="Etapa del Proyecto" />
+            <TextBox x:Name="TxtStage" />
+
+            <TextBlock Text="Observaciones (Opcional)" />
+            <TextBox x:Name="TxtObservations" Height="60" TextWrapping="Wrap" AcceptsReturn="True" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,30,0,0">
+                <Button Content="CANCELAR" Background="#3A3E47" Width="100" Margin="0,0,10,0" Click="BtnCancel_Click"/>
+                <Button Content="INICIAR VUELO" Width="140" Click="BtnStart_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>
