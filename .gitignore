@@ -1,0 +1,5 @@
+node_modules/
+signaling_server/node_modules/
+AssetGuardianMobile/node_modules/
+*.apk
+.DS_Store
