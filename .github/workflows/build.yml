@@ -36,6 +36,7 @@ jobs:
     - name: Build Android APK
       working-directory: ./AssetGuardianMobile/android
       run: |
+        export NODE_OPTIONS="--max-old-space-size=4096"
         chmod +x ./gradlew
         ./gradlew assembleRelease --no-daemon
 
